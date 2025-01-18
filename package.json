@@ -1,4 +1,15 @@
 {
-  "name": "blog-sites",
-  "packageManager": "yarn@4.6.0"
+  "name": "blog-site",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "yarn@4.6.0",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "backend": "node backend/bin/www",
+    "frontend": "cd frontend && next dev",
+    "dev": "concurrently \"yarn backend\" \"yarn frontend\""
+  }
 }

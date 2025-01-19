@@ -21,7 +21,7 @@ COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 
 # Copy the rest of the application code
-COPY backend/ ./backend/
+COPY . .
 
 # Copy .env file
 COPY .env .env

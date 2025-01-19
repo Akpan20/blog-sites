@@ -19,12 +19,12 @@ services:
 
   backend:
     build:
-      context: ./blog-sites/backend
+      context: .
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
     volumes:
-      - ./blog-sites/backend:/app
+      - ./backend:/app
       - /app/node_modules
     env_file:
       - ./backend/.env
@@ -33,12 +33,12 @@ services:
 
   frontend:
     build:
-      context: ./blog-sites/frontend
+      context: .
       dockerfile: Dockerfile
     ports:
       - "4000:4000"
     volumes:
-      - ./blog-sites/frontend:/app
+      - ./frontend:/app
       - /app/node_modules
     env_file:
       - ./frontend/.env

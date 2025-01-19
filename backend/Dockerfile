@@ -4,12 +4,12 @@ FROM node:18-alpine
 # Set the working directory
 WORKDIR /app
 
-# Install necessary build dependencies
-RUN apt-get update && apt-get install -y \
+# Install dependencies (python3, make, g++)
+RUN apk update && apk add --no-cache \
     python3 \
     make \
     g++ \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/cache/apk/*
 
 # Enable corepack for Yarn PnP
 RUN corepack enable
@@ -21,7 +21,7 @@ COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 
 # Copy the rest of the application code
-COPY . .
+COPY backend/ ./backend/
 
 # Copy .env file
 COPY .env .env

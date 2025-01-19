@@ -24,7 +24,7 @@ RUN yarn install --frozen-lockfile
 COPY . .
 
 # Copy .env file
-COPY .env .env
+COPY backend/.env .env
 
 # Expose the port the app runs on
 EXPOSE 3000

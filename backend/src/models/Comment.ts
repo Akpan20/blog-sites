@@ -1,5 +1,6 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
+import Reaction from './Reaction';
 
 interface CommentAttributes {
   id: number;
@@ -59,5 +60,8 @@ Comment.init(
     timestamps: true,
   }
 );
+
+// Define the association with the Reaction model
+Comment.hasMany(Reaction, { foreignKey: 'commentId', as: 'reactions' });
 
 export default Comment;

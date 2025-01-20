@@ -1,69 +1,64 @@
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/database';
+import { Post } from './Post';
+import { Comment } from './Comment';
+import { User } from './User';
 
-class Comment extends Model {
+class Reaction extends Model {
   public id!: number;
-  public content!: string;
+  public type!: string;
   public userId!: number;
   public postId!: number;
-  public status!: string;
-
-  // Define the association (if needed)
-  static associate(models: any) {
-    // You can define associations here if necessary, e.g.:
-    // this.belongsTo(models.User, { foreignKey: 'userId' });
-    // this.belongsTo(models.Post, { foreignKey: 'postId' });
-  }
-
-  // Static method to get comments by postId
-  static async getByPostId(postId: number) {
-    return this.findAll({
-      where: { postId },
-      order: [['createdAt', 'DESC']], // Optionally, order by the most recent comment
-    });
-  }
-
-  // Static method to find a comment by its ID
-  static async findById(id: number) {
-    return this.findByPk(id);
-  }
-
-  // Static method to delete a comment by its ID
-  static async delete(id: number) {
-    const comment = await this.findByPk(id);
-    if (comment) {
-      await comment.destroy();
-      return true;
-    }
-    return false;
-  }
+  public commentId!: number;
+  public createdAt!: Date;
+  public updatedAt!: Date;
 }
 
-Comment.init(
+Reaction.init(
   {
-    content: {
-      type: DataTypes.TEXT,
+    type: {
+      type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        isIn: [['like', 'dislike', 'heart', 'laugh', 'angry']],
+      },
     },
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: 'users', 
+        key: 'id',
+      },
     },
     postId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: 'posts', 
+        key: 'id',
+      },
     },
-    status: {
-      type: DataTypes.ENUM('pending', 'approved', 'rejected', 'spam'),
-      defaultValue: 'pending',
+    commentId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'comments', 
+        key: 'id',
+      },
     },
   },
   {
     sequelize,
-    modelName: 'Comment',
-    tableName: 'comments',
+    modelName: 'Reaction',
+    tableName: 'reactions',
     timestamps: true,
   }
 );
 
-export default Comment;
+// Define associations (if needed)
+Reaction.belongsTo(Post, { foreignKey: 'postId', as: 'post' });
+Reaction.belongsTo(Comment, { foreignKey: 'commentId', as: 'comment' });
+Reaction.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+
+export default Reaction;

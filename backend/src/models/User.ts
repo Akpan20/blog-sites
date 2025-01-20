@@ -1,6 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
 import bcrypt from 'bcrypt';
+import Reaction from './Reaction';
 
 interface UserAttributes {
   id: number;
@@ -94,5 +95,8 @@ User.init(
     underscored: true,
   }
 );
+
+const user = await User.findByPk(1, { include: [{ model: Reaction, as: 'reactions' }] });
+console.log(user.reactions);
 
 export default User;

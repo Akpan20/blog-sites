@@ -15,7 +15,7 @@ RUN apk update && apk add --no-cache \
 RUN corepack enable
 
 # Copy package.json and yarn.lock
-COPY package.json yarn.lock ./
+COPY package.json yarn.lock ./ 
 
 # Install dependencies using Yarn
 RUN yarn install
@@ -25,6 +25,9 @@ COPY . .
 
 # Copy .env file
 COPY backend/.env .env
+
+# Install dependencies again in the backend directory
+RUN cd backend && yarn install
 
 # Expose the port the app runs on
 EXPOSE 3000

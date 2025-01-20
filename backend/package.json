@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "sequelize": "yarn ts-node $(yarn bin sequelize)"
+    "sequelize": "yarn ts-node $(yarn bin sequelize)",
+    "migrate": "yarn sequelize db:migrate",
+    "seed": "yarn sequelize db:seed:all"
   },
   "dependencies": {
     "cookie-parser": "~1.4.7",

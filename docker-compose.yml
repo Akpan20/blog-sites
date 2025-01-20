@@ -23,12 +23,18 @@ services:
       dockerfile: ./backend/Dockerfile
     ports:
       - "3000:3000"
-    volumes:
-      - ./backend:/app
     env_file:
       - ./backend/.env
     environment:
       NODE_ENV: development
+      POSTGRES_HOST: blog_db
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: blogadmin
+      POSTGRES_PASSWORD: skyconet
+      POSTGRES_DB: blog_db
+    depends_on:
+      - blog_db
+    command: sh -c "./wait-for-db.sh && yarn migrate && yarn start"
 
   frontend:
     build:
@@ -44,6 +50,7 @@ services:
       NODE_ENV: development
     depends_on:
       - backend
+
 volumes:
   postgres_data:
 

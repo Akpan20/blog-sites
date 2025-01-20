@@ -1,6 +1,7 @@
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/database';
 import { PostStatus } from './PostStatus';
+import Reaction from './Reaction';
 
 class Post extends Model {
   public id!: number;
@@ -11,7 +12,23 @@ class Post extends Model {
   public createdAt!: Date;
   public updatedAt!: Date;
 
-  // Class-level methods or static methods can be defined here if necessary
+  // Class-level method to find all published posts
+  static async findPublishedPosts(): Promise<Post[]> {
+    return this.findAll({
+      where: {
+        status: PostStatus.PUBLISHED,
+      },
+    });
+  }
+
+  // Class-level method to find posts by a specific user
+  static async findPostsByUser(userId: number): Promise<Post[]> {
+    return this.findAll({
+      where: {
+        userId,
+      },
+    });
+  }
 }
 
 Post.init(
@@ -45,5 +62,8 @@ Post.init(
     timestamps: true,
   }
 );
+
+// Define the association with the Reaction model
+Post.hasMany(Reaction, { foreignKey: 'postId', as: 'reactions' });
 
 export default Post;

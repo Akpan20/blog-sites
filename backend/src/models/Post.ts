@@ -4,35 +4,31 @@ import { PostStatus } from './PostStatus';
 import Reaction from './Reaction';
 
 class Post extends Model {
-  public id!: number;
+  public categoryId!: number;
+  public id!: string;
   public title!: string;
   public content!: string;
-  public userId!: number;
-  public status!: string;
-  public createdAt!: Date;
-  public updatedAt!: Date;
-
-  // Class-level method to find all published posts
-  static async findPublishedPosts(): Promise<Post[]> {
-    return this.findAll({
-      where: {
-        status: PostStatus.PUBLISHED,
-      },
-    });
-  }
-
-  // Class-level method to find posts by a specific user
-  static async findPostsByUser(userId: number): Promise<Post[]> {
-    return this.findAll({
-      where: {
-        userId,
-      },
-    });
-  }
+  public author!: string;
+  public created_at!: string;
+  public likes_count!: number;
+  public comments_count!: number;
+  public liked!: boolean;
+  public featured_image?: string;
+  public versions?: Array<{ id: string; content: string; updatedAt: string }>;
+  public status!: typeof PostStatus;
 }
 
 Post.init(
   {
+    categoryId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
     title: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -41,25 +37,47 @@ Post.init(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    userId: {
-      type: DataTypes.INTEGER,
+    author: {
+      type: DataTypes.STRING,
       allowNull: false,
-      references: {
-        model: 'users', // Adjust the model name if necessary
-        key: 'id',
-      },
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    likes_count: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
+    comments_count: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
+    liked: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    featured_image: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    versions: {
+      type: DataTypes.JSON,
+      allowNull: true,
     },
     status: {
-      type: DataTypes.ENUM(PostStatus.DRAFT, PostStatus.PUBLISHED, PostStatus.ARCHIVED, PostStatus.DELETED),
+      type: DataTypes.ENUM(...Object.values(PostStatus)),
       allowNull: false,
-      defaultValue: PostStatus.PUBLISHED,
+      defaultValue: PostStatus.DRAFT,  // Default status as 'draft'
     },
   },
   {
     sequelize,
     modelName: 'Post',
     tableName: 'posts',
-    timestamps: true,
+    timestamps: false,
+    underscored: true,
   }
 );
 

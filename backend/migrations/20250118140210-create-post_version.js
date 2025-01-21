@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('post_versions', {
+    await queryInterface.createTable('post_version', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'posts',
+          model: 'post',
           key: 'id'
         },
         onDelete: 'CASCADE'
@@ -26,7 +26,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'users',
+          model: 'user',
           key: 'id'
         },
         onDelete: 'CASCADE'
@@ -37,10 +37,10 @@ module.exports = {
       }
     });
 
-    await queryInterface.addIndex('post_versions', ['postId']);
+    await queryInterface.addIndex('post_version', ['postId']);
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('post_versions');
+    await queryInterface.dropTable('post_version');
   }
 };

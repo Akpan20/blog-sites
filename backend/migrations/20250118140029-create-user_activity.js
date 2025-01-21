@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('user_activities', {
+    await queryInterface.createTable('user_activity', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -28,11 +28,11 @@ module.exports = {
     });
 
     // Add indexes for performance
-    await queryInterface.addIndex('user_activities', ['user_id']);
-    await queryInterface.addIndex('user_activities', ['post_id']);
+    await queryInterface.addIndex('user_activity', ['user_id']);
+    await queryInterface.addIndex('user_activity', ['post_id']);
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('user_activities');
+    await queryInterface.dropTable('user_activity');
   },
 };

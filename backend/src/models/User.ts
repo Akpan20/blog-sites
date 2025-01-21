@@ -2,13 +2,14 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
 import bcrypt from 'bcrypt';
 import Reaction from './Reaction';
+import UserProfile from './UserProfile';
 
 interface UserAttributes {
   id: number;
   username: string;
   email: string;
   password: string;
-  avatar: string; 
+  avatar: string;
   created_at: Date;
   updated_at: Date;
 }
@@ -20,15 +21,15 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public username!: string;
   public email!: string;
   public password!: string;
+  public avatar!: string;
   public created_at!: Date;
   public updated_at!: Date;
-  public avatar!: string; 
 
   // Method to create a new user
-  static async createUser({ username, email, password, avatar = 'default-avatar.png' }: { username: string; email: string; password: string, avatar?: string }) {
+  static async createUser({ username, email, password, avatar = 'default-avatar.png' }: { username: string; email: string; password: string; avatar?: string }) {
     const hashedPassword = await bcrypt.hash(password, 10);
     return this.create({ username, email, password: hashedPassword, avatar });
-  }  
+  }
 
   // Method to find a user by ID
   static async findById(id: number) {
@@ -74,6 +75,10 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    avatar: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     created_at: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
@@ -81,10 +86,6 @@ User.init(
     updated_at: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
-    },
-    avatar: {
-      type: DataTypes.STRING,
-      allowNull: true,
     },
   },
   {
@@ -96,7 +97,8 @@ User.init(
   }
 );
 
-const user = await User.findByPk(1, { include: [{ model: Reaction, as: 'reactions' }] });
-console.log(user.reactions);
+// Define associations
+User.hasOne(UserProfile, { foreignKey: 'userId', as: 'profile' });
+User.hasMany(Reaction, { foreignKey: 'userId', as: 'reactions' });
 
 export default User;

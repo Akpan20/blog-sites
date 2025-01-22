@@ -636,6 +636,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@prisma/client@npm:^6.2.1":
+  version: 6.2.1
+  resolution: "@prisma/client@npm:6.2.1"
+  peerDependencies:
+    prisma: "*"
+  peerDependenciesMeta:
+    prisma:
+      optional: true
+  checksum: 10c0/d6313da2408f2034bfcda1fa3500e6e9fdf13b8ca68d0f31804d6e540e9fedfd4c556bd2258488e5928fa383e5e3a43aa6469c819f8f8bed6250ef983feee5f6
+  languageName: node
+  linkType: hard
+
 "@redis/bloom@npm:1.2.0":
   version: 1.2.0
   resolution: "@redis/bloom@npm:1.2.0"
@@ -3651,6 +3663,7 @@ __metadata:
   dependencies:
     "@eslint/eslintrc": "npm:^3.2.0"
     "@next/eslint-plugin-next": "npm:^15.1.5"
+    "@prisma/client": "npm:^6.2.1"
     "@types/node": "npm:^20.17.14"
     "@types/react": "npm:^19.0.7"
     "@types/react-dom": "npm:^19.0.3"

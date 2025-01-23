@@ -16,3 +16,4 @@ blog-sites/frontend/.env
 
 #!.yarn/cache
 .pnp.*
+node_modules
